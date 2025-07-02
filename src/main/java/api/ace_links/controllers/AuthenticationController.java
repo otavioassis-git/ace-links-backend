@@ -57,9 +57,6 @@ public class AuthenticationController {
                 body.description(), body.role());
         String token = tokenService.generateToken(newUser);
 
-        System.out.println(body.description());
-        System.out.println(newUser.getDescription());
-
         repository.save(newUser);
         return ResponseEntity.ok(new UserLoginResponseDTO(newUser.getId(), newUser.getName(), newUser.getEmail(),
                 newUser.getRole(), token, null));
