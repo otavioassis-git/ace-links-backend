@@ -2,7 +2,6 @@ services:
   db:
     image: postgres:latest
     restart: always
-    # Add the environment variables here
     environment:
       - POSTGRES_USER=ace-links
       - POSTGRES_PASSWORD=password
