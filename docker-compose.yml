@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    # Add the environment variables here
+    environment:
+      - POSTGRES_USER=ace-links
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  db:
+    driver: local
