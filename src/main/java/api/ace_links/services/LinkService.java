@@ -26,7 +26,8 @@ public class LinkService {
   public void updateUserLinks(User user, List<LinkUpdateRequestDTO> links) throws IllegalArgumentException {
     for (LinkUpdateRequestDTO link : links) {
       if (link.id() == null) {
-        Link newLink = new Link(link.title(), link.url(), link.icon(), link.background(), link.description(), user);
+        Link newLink = new Link(link.rank(), link.title(), link.url(), link.icon(), link.background(),
+            link.description(), user);
         linkRepository.save(newLink);
       } else if (link.delete()) {
         linkRepository.delete(linkRepository.findById(link.id())
@@ -34,6 +35,7 @@ public class LinkService {
       } else {
         Link linkToUpdate = linkRepository.findById(link.id())
             .orElseThrow(() -> new IllegalArgumentException("Link " + link.id() + " not found"));
+        linkToUpdate.setRank(link.rank());
         linkToUpdate.setTitle(link.title());
         linkToUpdate.setUrl(link.url());
         linkToUpdate.setIcon(link.icon());

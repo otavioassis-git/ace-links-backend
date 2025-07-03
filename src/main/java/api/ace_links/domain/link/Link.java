@@ -32,6 +32,9 @@ public class Link {
   private UUID id;
 
   @Column(nullable = false)
+  private Integer rank;
+
+  @Column(nullable = false)
   private String title;
 
   @Column(nullable = false)
@@ -58,7 +61,8 @@ public class Link {
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Link(String title, String url, String icon, String background, String description, User user) {
+  public Link(Integer rank, String title, String url, String icon, String background, String description, User user) {
+    this.rank = rank;
     this.title = title;
     this.url = url;
     this.icon = icon;
