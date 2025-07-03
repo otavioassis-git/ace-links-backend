@@ -1,7 +1,6 @@
 package api.ace_links.services;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,8 @@ public class LinkService {
   @Autowired
   private LinkRepository linkRepository;
 
-  public List<LinkUserProjection> getUserLinks(UUID userId) {
-    List<LinkUserProjection> links = linkRepository.findLinksByUserId(userId);
+  public List<LinkUserProjection> getUserLinks(User user) {
+    List<LinkUserProjection> links = linkRepository.findLinksByUserId(user.getId());
 
     return links;
   }
