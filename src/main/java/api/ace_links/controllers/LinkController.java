@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.ace_links.domain.link.LinkGetResponseDTO;
 import api.ace_links.domain.link.LinkUpdateRequestDTO;
+import api.ace_links.domain.user.User;
 import api.ace_links.domain.user.UserExceptionResponseDTO;
+import api.ace_links.repositories.UserRepository;
 import api.ace_links.services.LinkService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,9 @@ public class LinkController {
   @Autowired
   private LinkService service;
 
+  @Autowired
+  private UserRepository userRepository;
+
   @GetMapping("/links")
   public ResponseEntity<LinkGetResponseDTO> getUserLinks(@PathVariable UUID userId) {
     LinkGetResponseDTO response = new LinkGetResponseDTO(service.getUserLinks(userId));
@@ -40,7 +45,9 @@ public class LinkController {
   public ResponseEntity<?> updateLinks(@PathVariable UUID userId,
       @RequestBody List<LinkUpdateRequestDTO> links) {
     try {
-      service.updateUserLinks(userId, links);
+      User user = userRepository.findById(userId)
+          .orElseThrow(() -> new IllegalArgumentException("User " + userId + " not found"));
+      service.updateUserLinks(user, links);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
