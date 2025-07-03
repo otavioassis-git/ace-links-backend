@@ -1,5 +1,6 @@
 package api.ace_links.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,36 +8,43 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import api.ace_links.domain.link.LinkGetResponseDTO;
+import api.ace_links.domain.link.LinkUpdateRequestDTO;
 import api.ace_links.domain.user.UserExceptionResponseDTO;
-import api.ace_links.domain.user.UserUpdatePassowordDTO;
-import api.ace_links.services.UserService;
-import jakarta.validation.Valid;
+import api.ace_links.services.LinkService;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/{userId}")
+public class LinkController {
 
   @Autowired
-  private UserService service;
+  private LinkService service;
 
-  @PutMapping("/{id}")
-  public ResponseEntity<UserExceptionResponseDTO> updatePassword(@PathVariable UUID id,
-      @RequestHeader("Authorization") String token,
-      @RequestBody @Valid UserUpdatePassowordDTO body) {
+  @GetMapping("/links")
+  public ResponseEntity<LinkGetResponseDTO> getUserLinks(@PathVariable UUID userId) {
+    LinkGetResponseDTO response = new LinkGetResponseDTO(service.getUserLinks(userId));
+
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/links")
+  public ResponseEntity<?> updateLinks(@PathVariable UUID userId,
+      @RequestBody List<LinkUpdateRequestDTO> links) {
     try {
-      service.updatePassword(id, token.replace("Bearer ", ""), body.newPassword());
-      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+      service.updateUserLinks(userId, links);
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body(new UserExceptionResponseDTO(e.getMessage()));
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+    return ResponseEntity.ok().build();
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
