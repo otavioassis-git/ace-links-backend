@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.ace_links.domain.link.LinkGetResponseDTO;
 import api.ace_links.domain.link.LinkUpdateRequestDTO;
+import api.ace_links.domain.link.LinkUserProjection;
 import api.ace_links.domain.user.User;
 import api.ace_links.domain.user.UserExceptionResponseDTO;
 import api.ace_links.repositories.UserRepository;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/{userId}")
+@RequestMapping("/")
 public class LinkController {
 
   @Autowired
@@ -34,14 +35,19 @@ public class LinkController {
   @Autowired
   private UserRepository userRepository;
 
-  @GetMapping("/links")
-  public ResponseEntity<LinkGetResponseDTO> getUserLinks(@PathVariable UUID userId) {
-    LinkGetResponseDTO response = new LinkGetResponseDTO(service.getUserLinks(userId));
+  @GetMapping("/{username}/links")
+  public ResponseEntity<LinkGetResponseDTO> getUserLinks(@PathVariable String username) {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new IllegalArgumentException("User " + username + " not found"));
+    List<LinkUserProjection> response = service.getUserLinks(user);
 
-    return ResponseEntity.ok(response);
+    LinkGetResponseDTO dto = new LinkGetResponseDTO(user.getName() + " " + user.getSurname(), user.getUserName(),
+        user.getAvatar(), user.getDescription(), response);
+
+    return ResponseEntity.ok(dto);
   }
 
-  @PostMapping("/links")
+  @PostMapping("/{userId}/links")
   public ResponseEntity<?> updateLinks(@PathVariable UUID userId,
       @RequestBody List<LinkUpdateRequestDTO> links) {
     try {

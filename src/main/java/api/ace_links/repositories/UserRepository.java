@@ -9,4 +9,6 @@ import api.ace_links.domain.user.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
   Optional<User> findByEmail(String email);
+
+  Optional<User> findByUsername(String username);
 }
