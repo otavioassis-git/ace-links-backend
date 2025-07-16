@@ -35,12 +35,18 @@ public class LinkService {
       } else {
         Link linkToUpdate = linkRepository.findById(link.id())
             .orElseThrow(() -> new IllegalArgumentException("Link " + link.id() + " not found"));
-        linkToUpdate.setRank(link.rank());
-        linkToUpdate.setTitle(link.title());
-        linkToUpdate.setUrl(link.url());
-        linkToUpdate.setIcon(link.icon());
-        linkToUpdate.setBackground(link.background());
-        linkToUpdate.setDescription(link.description());
+        if (link.rank() != null)
+          linkToUpdate.setRank(link.rank());
+        if (link.title() != null)
+          linkToUpdate.setTitle(link.title());
+        if (link.url() != null)
+          linkToUpdate.setUrl(link.url());
+        if (link.icon() != null)
+          linkToUpdate.setIcon(link.icon());
+        if (link.background() != null)
+          linkToUpdate.setBackground(link.background());
+        if (link.description() != null)
+          linkToUpdate.setDescription(link.description());
         linkRepository.save(linkToUpdate);
       }
     }
