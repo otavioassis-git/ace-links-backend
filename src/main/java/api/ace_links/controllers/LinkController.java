@@ -41,8 +41,8 @@ public class LinkController {
         .orElseThrow(() -> new IllegalArgumentException("User " + username + " not found"));
     List<LinkUserProjection> response = service.getUserLinks(user);
 
-    LinkGetResponseDTO dto = new LinkGetResponseDTO(user.getName() + " " + user.getSurname(), user.getUserName(),
-        user.getAvatar(), user.getDescription(), response);
+    LinkGetResponseDTO dto = new LinkGetResponseDTO(user.getId(), user.getName() + " " + user.getSurname(),
+        user.getUserName(), user.getAvatar(), user.getDescription(), response);
 
     return ResponseEntity.ok(dto);
   }
