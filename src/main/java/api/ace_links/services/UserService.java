@@ -36,10 +36,14 @@ public class UserService {
     if (userRequester.getRole() != UserRole.ADMIN && userRequester.getEmail() != userRequested.getEmail())
       throw new BadRequestException("Can't update other users info");
 
-    userRequested.setName(body.name());
-    userRequested.setSurname(body.surname());
-    userRequested.setAvatar(body.avatar());
-    userRequested.setDescription(body.description());
+    if (body.name() != null)
+      userRequested.setName(body.name());
+    if (body.surname() != null)
+      userRequested.setSurname(body.surname());
+    if (body.avatar() != null)
+      userRequested.setAvatar(body.avatar());
+    if (body.description() != null)
+      userRequested.setDescription(body.description());
     userRepository.save(userRequested);
 
     return userRequested;
