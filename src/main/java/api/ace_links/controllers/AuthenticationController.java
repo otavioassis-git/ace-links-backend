@@ -44,12 +44,12 @@ public class AuthenticationController {
     public ResponseEntity<UserLoginResponseDTO> create(@RequestBody @Valid UserRegisterRequestDTO body) {
         if (body.role() == UserRole.ADMIN) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new UserLoginResponseDTO(null, null, null, null, null, "Admin role is not allowed"));
+                    .body(new UserLoginResponseDTO(null, null, null, null, null, null, "Admin role is not allowed"));
         }
 
         if (repository.findByEmail(body.email()) != null)
             return ResponseEntity.badRequest()
-                    .body(new UserLoginResponseDTO(null, null, null, null, null, "Email already registered"));
+                    .body(new UserLoginResponseDTO(null, null, null, null, null, null, "Email already registered"));
 
         User newUser = new User(body.username(), body.email(), passwordEncoder.encode(body.password()), body.name(),
                 body.surname(),
@@ -58,8 +58,10 @@ public class AuthenticationController {
         String token = tokenService.generateToken(newUser);
 
         repository.save(newUser);
-        return ResponseEntity.ok(new UserLoginResponseDTO(newUser.getId(), newUser.getName(), newUser.getEmail(),
-                newUser.getRole(), token, null));
+        return ResponseEntity.ok(
+                new UserLoginResponseDTO(newUser.getId(), newUser.getName() + " " + newUser.getSurname(),
+                        newUser.getUserName(), newUser.getEmail(),
+                        newUser.getRole(), token, null));
     }
 
     @PostMapping("/login")
@@ -71,11 +73,13 @@ public class AuthenticationController {
             User user = (User) auth.getPrincipal();
             var token = tokenService.generateToken(user);
 
-            return ResponseEntity.ok(new UserLoginResponseDTO(user.getId(), user.getName(), user.getEmail(),
-                    user.getRole(), token, null));
+            return ResponseEntity
+                    .ok(new UserLoginResponseDTO(user.getId(), user.getName() + " " + user.getSurname(),
+                            user.getUserName(), user.getEmail(),
+                            user.getRole(), token, null));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
-                    .body(new UserLoginResponseDTO(null, null, null, null, null, e.getMessage()));
+                    .body(new UserLoginResponseDTO(null, null, null, null, null, null, e.getMessage()));
         }
     }
 

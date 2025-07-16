@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import api.ace_links.domain.link.LinkGetResponseDTO;
-import api.ace_links.domain.link.LinkUpdateRequestDTO;
+import api.ace_links.domain.link.LinkEditRequestDTO;
 import api.ace_links.domain.link.LinkUserProjection;
 import api.ace_links.domain.user.User;
 import api.ace_links.domain.user.UserExceptionResponseDTO;
@@ -49,7 +49,7 @@ public class LinkController {
 
   @PostMapping("/{userId}/links")
   public ResponseEntity<?> updateLinks(@PathVariable UUID userId,
-      @RequestBody List<LinkUpdateRequestDTO> links) {
+      @RequestBody List<LinkEditRequestDTO> links) {
     try {
       User user = userRepository.findById(userId)
           .orElseThrow(() -> new IllegalArgumentException("User " + userId + " not found"));

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import api.ace_links.domain.link.Link;
-import api.ace_links.domain.link.LinkUpdateRequestDTO;
+import api.ace_links.domain.link.LinkEditRequestDTO;
 import api.ace_links.domain.link.LinkUserProjection;
 import api.ace_links.domain.user.User;
 import api.ace_links.repositories.LinkRepository;
@@ -23,8 +23,8 @@ public class LinkService {
     return links;
   }
 
-  public void updateUserLinks(User user, List<LinkUpdateRequestDTO> links) throws IllegalArgumentException {
-    for (LinkUpdateRequestDTO link : links) {
+  public void updateUserLinks(User user, List<LinkEditRequestDTO> links) throws IllegalArgumentException {
+    for (LinkEditRequestDTO link : links) {
       if (link.id() == null) {
         Link newLink = new Link(link.rank(), link.title(), link.url(), link.icon(), link.background(),
             link.description(), user);
