@@ -41,12 +41,9 @@ public class LinkService {
           linkToUpdate.setTitle(link.title());
         if (link.url() != null)
           linkToUpdate.setUrl(link.url());
-        if (link.icon() != null)
-          linkToUpdate.setIcon(link.icon());
-        if (link.background() != null)
-          linkToUpdate.setBackground(link.background());
-        if (link.description() != null)
-          linkToUpdate.setDescription(link.description());
+        linkToUpdate.setIcon(link.icon());
+        linkToUpdate.setBackground(link.background());
+        linkToUpdate.setDescription(link.description());
         linkRepository.save(linkToUpdate);
       }
     }
