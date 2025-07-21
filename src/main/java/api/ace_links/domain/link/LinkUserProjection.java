@@ -14,4 +14,6 @@ public interface LinkUserProjection {
   String getBackground();
 
   String getDescription();
+
+  Integer getRank();
 }
